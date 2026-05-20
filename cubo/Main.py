@@ -7,7 +7,7 @@ from Cylinder import Cylinder
 
 house = House(2)
 circle = Circle()
-cylinder = Cylinder()
+cylinder = Cylinder() #dama
 renderer = Renderer3D()
 
 renderer.render_faces(cylinder)

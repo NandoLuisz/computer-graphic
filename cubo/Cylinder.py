@@ -10,11 +10,6 @@ class Cylinder(Mesh):
         super().__init__()
 
         half_height = height / 2
-
-        # ==========================================
-        # CENTROS
-        # ==========================================
-
         top_center = 0
         bottom_center = 1
 
@@ -25,11 +20,6 @@ class Cylinder(Mesh):
         self.vertices.append(
             Vec3(0, -half_height, 0)
         )
-
-        # ==========================================
-        # BORDAS
-        # ==========================================
-
         for i in range(segments):
 
             angle = (2 * math.pi * i) / segments
@@ -46,11 +36,6 @@ class Cylinder(Mesh):
             self.vertices.append(
                 Vec3(x, -half_height, z)
             )
-
-        # ==========================================
-        # TOPO E BASE
-        # ==========================================
-
         for i in range(segments):
 
             top1 = 2 + i * 2
@@ -78,20 +63,10 @@ class Cylinder(Mesh):
             self.faces.append(
                 (top2, bottom1, bottom2)
             )
-
-        # ==========================================
-        # CORES
-        # ==========================================
-
         self.face_colors = [
 
             (0.0, 0.0, 0.0)
 
             for _ in self.faces
         ]
-
-        # ==========================================
-        # NORMAIS
-        # ==========================================
-
         self.compute_normals()
