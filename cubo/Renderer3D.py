@@ -6,18 +6,40 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 class Renderer3D:
 
 
-    def setup_axis(self, ax, limit=3):
+    def setup_axis(self, ax, mesh, margin=1):
 
-        ax.set_xlim(-limit, limit)
-        ax.set_ylim(-limit, limit)
-        ax.set_zlim(-limit, limit)
+        xs = [v.x for v in mesh.vertices]
+        ys = [v.y for v in mesh.vertices]
+        zs = [v.z for v in mesh.vertices]
+
+        ax.set_xlim(min(xs) - margin, max(xs) + margin)
+        ax.set_ylim(min(ys) - margin, max(ys) + margin)
+        ax.set_zlim(min(zs) - margin, max(zs) + margin)
 
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
 
-        ax.set_box_aspect([1,1,1])
+        dx = max(xs) - min(xs)
+        dy = max(ys) - min(ys)
+        dz = max(zs) - min(zs)
 
+        # evita dimensão zero
+        if dx == 0:
+            dx = 1
+
+        if dy == 0:
+            dy = 1
+
+        if dz == 0:
+            dz = 1
+
+        ax.set_box_aspect([dx, dy, dz])
+
+
+    # ==========================================
+    # WIREFRAME
+    # ==========================================
 
     def render_wireframe(self, mesh):
 
@@ -39,9 +61,9 @@ class Renderer3D:
 
             ax.plot(xs, ys, zs, color='black')
 
-        # =========================
+        # ==========================================
         # NORMAIS
-        # =========================
+        # ==========================================
 
         for i, face in enumerate(mesh.faces):
 
@@ -67,10 +89,14 @@ class Renderer3D:
                 color='red'
             )
 
-        self.setup_axis(ax)
+        self.setup_axis(ax, mesh)
 
         plt.show()
 
+
+    # ==========================================
+    # FACES PREENCHIDAS
+    # ==========================================
 
     def render_faces(self, mesh):
 
@@ -80,10 +106,14 @@ class Renderer3D:
 
         self.render_faces_on_axis(ax, mesh)
 
-        self.setup_axis(ax)
+        self.setup_axis(ax, mesh)
 
         plt.show()
 
+
+    # ==========================================
+    # RENDER EM UM AXIS EXISTENTE
+    # ==========================================
 
     def render_faces_on_axis(self, ax, mesh):
 
@@ -96,6 +126,7 @@ class Renderer3D:
                 mesh.vertices[face[0]].to_tuple(),
                 mesh.vertices[face[1]].to_tuple(),
                 mesh.vertices[face[2]].to_tuple(),
+
             ]
 
             triangles.append(triangle)
@@ -104,17 +135,26 @@ class Renderer3D:
         if len(triangles) == 0:
             return
 
+        # fallback de cores
+        if hasattr(mesh, "face_colors"):
+
+            colors = mesh.face_colors
+
+        else:
+
+            colors = [(0.7, 0.7, 0.7)] * len(mesh.faces)
+
         collection = Poly3DCollection(
 
             triangles,
 
-            facecolors=mesh.face_colors,
+            facecolors=colors,
 
-            edgecolors='black',
+            edgecolors=None,
 
-            linewidths=1,
+            linewidths=0,
 
-            alpha=0.8
+            alpha=1
         )
 
         ax.add_collection3d(collection)
