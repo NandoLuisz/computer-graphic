@@ -1,9 +1,9 @@
-from Cube import Cube
+from House import House
 from Renderer3D import Renderer3D
 
-cube = Cube(2)
-cube.scale(1.5, 2, 2.5)
+house = House(2)
+house.rotate_x(45)
 
 renderer = Renderer3D()
 
-renderer.render_wireframe(cube)
+renderer.render_faces(house)

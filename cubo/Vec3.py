@@ -29,6 +29,9 @@ class Vec3:
         if mag < 1e-8:
             return Vec3(0, 0, 0)
         return Vec3(self.x / mag, self.y / mag, self.z / mag)
+
+    def to_tuple(self):
+     return (self.x, self.y, self.z)
     
     def __repr__(self):
         return f"Vec3({self.x}, {self.y}, {self.z})"

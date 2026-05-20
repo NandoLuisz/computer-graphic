@@ -5,8 +5,9 @@ class Mesh:
     def __init__(self):
         self.vertices = []
         self.faces = []
+        self.face_colors = []
         self.normals = []
-        self.color = (255, 255, 255) # Cor padrão branca
+        self.color = (1.0, 1.0, 1.0) # Cor padrão branca
 
     def compute_normals(self):
         self.normals = []
@@ -20,9 +21,19 @@ class Mesh:
             self.normals.append(normal)
     
     def transform(self, matrix):
+
         for i, v in enumerate(self.vertices):
+
             transformed = matrix * [v.x, v.y, v.z, 1]
-            self.vertices[i] = Vec3(transformed[0], transformed[1], transformed[2])
+
+            self.vertices[i] = Vec3(
+                transformed[0],
+                transformed[1],
+                transformed[2]
+            )
+
+        self.compute_normals()
+
         return self
     
     def translate(self, tx, ty, tz):
