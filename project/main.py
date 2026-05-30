@@ -7,10 +7,10 @@ from engine.renderer import Renderer
 from engine.transform import rotation, translate
 from engine.projection import perspective
 from engine.camera import Camera, World_to_camera, update_camera
+from engine.back_face_culling import back_face
+from engine.load_mesh import load_mesh
 
 from models.cube import vertices, edges, faces
-from models.figura1 import vertices as v, edges as a
-from models.ponto import ponto , edge as e
 
 pygame.init()
 
@@ -46,6 +46,15 @@ cube = Mesh(
     rotation=np.array([0,0,0])
 )
 
+v, f = load_mesh("models/dama.csv")
+dama = Mesh(
+    vertices= v,
+    edges= [],
+    faces= f,
+    position=np.array([0,0,0]),
+    rotation=np.array([0,0,0])
+)
+
 
 
 '''figura = Mesh(
@@ -61,8 +70,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # aperta o icone de feichar
             running=False
-    #cube.rotation[0] +=1 # rotação em x
-    #cube.rotation[1] +=1 #rotação em y
 
     # rotação horizaontal -> yaw rotaciona entorno do eixo Y 
     keys = pygame.key.get_pressed()
@@ -92,13 +99,16 @@ while running:
     )
 
     # coordenadas do mundo
-    transformed = rotation(cube.vertices, cube.rotation) # retorna os vetores dos vertices convertidos
-    transformed = translate(transformed, cube.position) # translação
+    transformed = rotation(dama.vertices, dama.rotation) # retorna os vetores dos vertices convertidos
+    transformed = translate(transformed, dama.position) # translação
     # atualizar as coordenas da camera:
     update_camera(camera)
 
     # coordenadas da camera
     transformed = World_to_camera(transformed, camera) # retorna os vetores em coordenadas da câmera
+
+    #remocendo os vertices que não são visiveis
+    visible_faces = back_face(dama.faces, transformed)
 
     #projeção em perspectva
     project = perspective(transformed, WIDTH, HEIGHT)
@@ -106,8 +116,8 @@ while running:
     screen.fill((20,20,20)) # cor de fundo da tela
     
     #desenhando o objeto
-    renderer.draw_faces(project, cube.faces)
-    #renderer.draw_wireframe(project, cube.edges)
+    renderer.draw_faces(project, visible_faces)
+    #renderer.draw_wireframe(project, cubo.edges)
     #renderer.desenhar_ponto(project)
 
 

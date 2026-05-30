@@ -18,7 +18,8 @@ def perspective(vertices, width, height, focal_length=400):
     for x, y, z in vertices:
 
         if z <= NEAR:
-            z = NEAR
+            projected.append(None)
+            continue
 
         px = (x * focal_length) / z
         py = (y * focal_length) / z
@@ -27,5 +28,4 @@ def perspective(vertices, width, height, focal_length=400):
         screen_y = int(-py + height / 2)
         
         projected.append((screen_x, screen_y))
-        print(projected)
     return projected

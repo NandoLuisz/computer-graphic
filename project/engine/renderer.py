@@ -26,15 +26,19 @@ class Renderer:
             pygame.draw.circle(
                 self.screen, (255,255,255), (ponto_x, ponto_y), 3,0
             )
-    def draw_faces(self, projected_vetices, faces):
+    def draw_faces(self, projected_vertices, faces):
         for face in faces:
-            points = [
-                projected_vetices[i]
-                for i in face
-            ]
+            points = []
+            for i in face.vertices:
+
+                if projected_vertices[i] is None:
+                    break
+                points.append(projected_vertices[i])
+            if len(points) != 3:
+                continue
 
             pygame.draw.polygon(
                 self.screen,
-                (200,200,200),
+                (235, 168, 52),
                 points
             )
