@@ -7,7 +7,6 @@ class Renderer:
         self.screen = screen
 
     def draw_wireframe(self, projected_vertices, edges):
-        print(projected_vertices)
         if projected_vertices:
             for start, end in edges:
 
@@ -18,7 +17,7 @@ class Renderer:
                     projected_vertices[end],
                     2
                 )
-    '''def desenhar_ponto(self, projected_vertice):
+    def desenhar_ponto(self, projected_vertice):
         if projected_vertice:
             ponto_x = projected_vertice[0][0]
             ponto_y = projected_vertice[0][1]
@@ -27,4 +26,15 @@ class Renderer:
             pygame.draw.circle(
                 self.screen, (255,255,255), (ponto_x, ponto_y), 3,0
             )
-    '''
+    def draw_faces(self, projected_vetices, faces):
+        for face in faces:
+            points = [
+                projected_vetices[i]
+                for i in face
+            ]
+
+            pygame.draw.polygon(
+                self.screen,
+                (200,200,200),
+                points
+            )

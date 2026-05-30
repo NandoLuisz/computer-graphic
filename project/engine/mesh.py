@@ -5,6 +5,7 @@ import numpy as np
 class Mesh:
     vertices: np.ndarray
     edges: list
+    faces:list
 
     position: np.ndarray
     rotation: np.ndarray

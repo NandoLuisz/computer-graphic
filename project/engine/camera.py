@@ -49,7 +49,7 @@ def update_camera(camera):
 
     #posição orbital
 
-    camera.position = camera.target + np.array([x,y,z], type=float)
+    camera.position = camera.target + np.array([x,y,z], dtype=float)
 
 
 @dataclass

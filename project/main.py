@@ -8,7 +8,7 @@ from engine.transform import rotation, translate
 from engine.projection import perspective
 from engine.camera import Camera, World_to_camera, update_camera
 
-from models.cube import vertices, edges
+from models.cube import vertices, edges, faces
 from models.figura1 import vertices as v, edges as a
 from models.ponto import ponto , edge as e
 
@@ -36,27 +36,25 @@ camera = Camera(
     radius=10 
 )
 
-ponto = Mesh(
-    vertices= ponto,
-    edges= e,
-    position=np.array([0,0,3]),
-    rotation=np.array([0,0,0])
-)
+
 
 cube = Mesh(
     vertices= vertices,
     edges= edges,
+    faces= faces,
     position=np.array([0,0,0]),
     rotation=np.array([0,0,0])
 )
 
-figura = Mesh(
+
+
+'''figura = Mesh(
     vertices= v,
     edges= a,
     position = np.array([0,10,20]),
     rotation=np.array([0,0,0])
 )
-
+'''
 running = True
 while running:
     dt= clock.tick(60) # atualizar acada 60s
@@ -108,7 +106,8 @@ while running:
     screen.fill((20,20,20)) # cor de fundo da tela
     
     #desenhando o objeto
-    renderer.draw_wireframe(project, cube.edges)
+    renderer.draw_faces(project, cube.faces)
+    #renderer.draw_wireframe(project, cube.edges)
     #renderer.desenhar_ponto(project)
 
 
