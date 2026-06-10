@@ -8,7 +8,8 @@ class Mesh:
 
     edges: list
     faces: list[Face]
-
+    vertex_normals: np.ndarray 
+    
     position: np.ndarray
     rotation: np.ndarray
 

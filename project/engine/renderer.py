@@ -17,15 +17,19 @@ class Renderer:
                     projected_vertices[end],
                     2
                 )
-    def desenhar_ponto(self, projected_vertice):
-        if projected_vertice:
-            ponto_x = projected_vertice[0][0]
-            ponto_y = projected_vertice[0][1]
-            print(ponto_x)
-            print(ponto_y)
-            pygame.draw.circle(
-                self.screen, (255,255,255), (ponto_x, ponto_y), 3,0
-            )
+
+    def draw_point( self, point, color=(255,255,255), radius=5 ):
+
+        x = int(point[0])
+        y = int(point[1])
+
+        pygame.draw.circle(
+            self.screen,
+            color,
+            (x,y),
+            radius
+        )
+
     def draw_faces(self, projected_vertices, faces):
         for face in faces:
             points = []
@@ -39,6 +43,6 @@ class Renderer:
 
             pygame.draw.polygon(
                 self.screen,
-                (235, 168, 52),
+                face.color,
                 points
             )

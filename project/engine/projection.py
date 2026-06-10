@@ -9,7 +9,7 @@ import numpy as np
 
 
 
-def perspective(vertices, width, height, focal_length=400):
+def perspective(vertices, width, height, focal_length = 400):
 
     projected = []
 
@@ -27,5 +27,5 @@ def perspective(vertices, width, height, focal_length=400):
         screen_x = int(px + width / 2)
         screen_y = int(-py + height / 2)
         
-        projected.append((screen_x, screen_y))
+        projected.append((screen_x, screen_y, z))
     return projected

@@ -12,7 +12,7 @@ vertices = np.array([
     [ 1,-1, 1],
     [ 1, 1, 1],
     [-1, 1, 1]
-])
+], dtype=float)
 
 edges = [
     (0,1),

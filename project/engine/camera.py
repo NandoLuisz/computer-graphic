@@ -8,7 +8,7 @@ def normalize(v):
         return v
     return v / norm
 
-def World_to_camera(vertices, camera):
+'''def World_to_camera(vertices, camera):
     # normalização de vetores, utlizando o metodo do professor
     relative = camera.target - camera.position
     camera.forward = normalize(relative) # encontrado o vetor que aponta para frente
@@ -31,13 +31,49 @@ def World_to_camera(vertices, camera):
         camera.right,
         camera.up,
         camera.forward
+    ])'''
+def World_to_camera(vertices, camera):
+
+    relative = camera.target - camera.position
+    camera.forward = normalize(relative)
+
+    if abs(camera.forward[1]) > 0.99:
+        world_up = np.array([1,0,0], dtype=float)
+    else:
+        world_up = np.array([0,1,0], dtype=float)
+
+    camera.right = np.cross(
+        camera.forward,
+        world_up
+    )
+
+    camera.right = normalize(
+        camera.right
+    )
+
+    camera.up = np.cross(
+        camera.right,
+        camera.forward
+    )
+
+    camera.up = normalize(
+        camera.up
+    )
+
+    rotation = np.array([
+        camera.right,
+        camera.up,
+        camera.forward
     ])
 
-    #traslação 
-    transformation = vertices -camera.position
-    #rotação
-    transformation = transformation @ rotation.T # @ é usado para operações entre matrizes AxB^t
-    return transformation
+    transformation = vertices - camera.position
+
+    transformation = (
+        transformation
+        @ rotation.T
+    )
+
+    return transformation, rotation
 
 def update_camera(camera):
     #coordendas esféricas

@@ -3,6 +3,8 @@
 
 import numpy as np
 
+import numpy as np
+
 def back_face(faces, vertices):
 
     visible_faces = []
@@ -18,7 +20,23 @@ def back_face(faces, vertices):
 
         normal = np.cross(edge1, edge2)
 
-        center = (v0 + v1 + v2) / 3
+        norm = np.linalg.norm(normal)
+
+        if norm < 1e-6:
+            continue
+
+        normal /= norm
+
+        center = (v0 + v1 + v2) / 3.0
+
+        face.normal = normal
+        face.center = center
+
+        face.depth = (
+            v0[2] +
+            v1[2] +
+            v2[2]
+        ) / 3.0
 
         if np.dot(normal, -center) > 0:
             visible_faces.append(face)
