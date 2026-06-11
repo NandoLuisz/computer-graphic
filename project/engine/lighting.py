@@ -66,3 +66,58 @@ def vertex_lambert( position, normal, light_position, color):
         int(color[1] * intensity),
         int(color[2] * intensity)
     )
+
+def vertex_phong( position, normal, light_position, color):
+
+    N = normalize(normal)
+
+    L = light_position - position
+
+    norm = np.linalg.norm(L)
+
+    if norm < 1e-6:
+        return color
+
+    L = L / norm
+
+    # câmera está na origem do SCC
+    V = normalize(-position)
+
+    ambient = 0.2
+
+    ndotl = np.dot(N, L)
+
+    diffuse = max(0.0, ndotl)
+
+    R = (
+        2 * np.dot(N, L) * N
+        - L
+    )
+
+    R = normalize(R)
+
+    shininess = 16
+
+    specular = max(
+        0.0,
+        np.dot(R, V)
+    )
+
+    specular = specular ** shininess
+
+    intensity = (
+        ambient
+        + 0.6 * diffuse
+        + 0.4 * specular
+    )
+
+    intensity = min(
+        intensity,
+        1.0
+    )
+
+    return (
+        int(color[0] * intensity),
+        int(color[1] * intensity),
+        int(color[2] * intensity)
+    )
