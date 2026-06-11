@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from engine.face import Face
+from geometry.face import Face
 import numpy as np
 
 @dataclass
@@ -13,4 +13,4 @@ class Mesh:
     position: np.ndarray
     rotation: np.ndarray
 
-    scale: float = 1.0
+    scale:np.ndarray

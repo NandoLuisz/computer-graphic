@@ -1,0 +1,22 @@
+engine/
+│
+├── scene/
+│   ├── scene.py
+│   ├── camera.py
+│   ├── light.py
+│   └── mesh.py
+│
+├── geometry/
+│   ├── face.py
+│   ├── transform.py
+│   └── vertex_normals.py
+│
+├── rendering/
+│   ├── render_system.py
+│   ├── rasterizer.py
+│   ├── projection.py
+│   ├── lighting.py
+│   └── back_face_culling.py
+│
+└── io/
+    └── loader.py

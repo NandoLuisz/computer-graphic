@@ -3,8 +3,6 @@
 
 import numpy as np
 
-import numpy as np
-
 def back_face(faces, vertices):
 
     visible_faces = []

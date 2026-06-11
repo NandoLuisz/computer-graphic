@@ -1,5 +1,5 @@
 import numpy as np
-from engine.face import Face
+from geometry.face import Face
 
 
 vertices = np.array([

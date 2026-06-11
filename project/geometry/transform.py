@@ -43,8 +43,8 @@ def rotation(vertices, rotation):
 
 def scale(vertices, factor):
     scale_matrix= np.array([
-        [factor, 0, 0],
-        [0, factor, 0],
-        [0, 0, factor]
+        [factor[0], 0, 0],
+        [0, factor[1], 0],
+        [0, 0, factor[2]]
     ])
     return vertices @ scale_matrix.T

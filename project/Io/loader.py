@@ -1,4 +1,4 @@
-from engine.face import Face
+from geometry.face import Face
 import numpy as np
 
 def load_mesh(filename):

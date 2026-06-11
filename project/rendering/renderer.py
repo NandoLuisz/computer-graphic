@@ -113,3 +113,21 @@ class Renderer:
             [0, size, 0],   # Y
             [0, 0, size]    # Z
         ], dtype=float)
+    
+    def world_grid(self, size=10, step=1):
+
+        lines = []
+
+        for i in range(-size, size + 1, step):
+
+            lines.append([
+                [-size, 0, i],
+                [ size, 0, i]
+            ])
+
+            lines.append([
+                [i, 0, -size],
+                [i, 0,  size]
+            ])
+
+        return lines

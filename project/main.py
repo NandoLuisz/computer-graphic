@@ -1,18 +1,28 @@
+import copy
 import pygame
 import numpy as np
 import math
 
-from engine.mesh import Mesh
-from engine.renderer import Renderer
-from engine.rasterizer import Rasterizer
-from engine.transform import rotation, translate
-from engine.projection import perspective
-from engine.camera import Camera, World_to_camera, update_camera
-from engine.back_face_culling import back_face
-from engine.loader import load_mesh, build_edges
-from engine.lighting import vertex_phong
+from Io.loader import build_edges, load_mesh
+from Io.loader_obj import load_obj
+
+from geometry.vertex_normals import compute_vertex_normals
+
+from rendering.projection import perspective
+from rendering.rasterizer import Rasterizer
+from rendering.render_system import RenderSystem
+from rendering.renderer import Renderer
+
+from scene.camera import Camera, World_to_camera, update_camera
+from scene.light import Light
+from scene.mesh import Mesh
+from scene.scene import Scene
+
 from models.cube import vertices, edges, faces
-from engine.vertex_normals import compute_vertex_normals
+from models.plane import ( vertices as plane_vertices, edges as plane_edges, faces as plane_faces)
+
+
+scene = Scene()
 
 # criando camera
 
@@ -25,54 +35,152 @@ camera = Camera(
     right=np.array([0,0,0]),
     target= np.array([0, 0, 0]),
 
-    yaw=0.7,
-    pitch= 0.3,
-    radius=10 
+    yaw=math.radians(45),
+    pitch= math.radians(25),
+    radius=20 
+)
+
+scene.set_camera(camera)
+
+#criando plano
+plane_normals = np.array([
+    [0,1,0],
+    [0,1,0],
+    [0,1,0],
+    [0,1,0]
+], dtype=float)
+
+ground = Mesh(
+    vertices=plane_vertices.copy(),
+    edges=plane_edges,
+    faces=copy.deepcopy(plane_faces),
+    vertex_normals=plane_normals,
+    position=np.array([0,-2,0]),
+    rotation=np.array([0,0,0]),
+    scale=np.array([1.0,1.0,1.0])
 )
 
 # criando objetos
 
-cube = Mesh(
-    vertices= vertices,
-    edges= edges,
-    faces= faces,
-    vertex_normals= compute_vertex_normals(vertices, faces),
-    position=np.array([0,0,0]),
-    rotation=np.array([0,0,0])
+cube1 = Mesh(
+    vertices=vertices.copy(),
+    edges=edges,
+    faces=copy.deepcopy(faces),
+    vertex_normals=compute_vertex_normals(vertices, faces),
+    position=np.array([-3,0,-3]),
+    rotation=np.array([0,0,0]),
+    scale=np.array([1.0, 1.0, 1.0])
 )
 
-vertice_dama, face_dama= load_mesh("dama.csv") # importanto figura
+cube2 = Mesh(
+    vertices=vertices.copy(),
+    edges=edges,
+    faces=copy.deepcopy(faces),
+    vertex_normals=compute_vertex_normals(vertices, faces),
+    position=np.array([3,0,-3]),
+    rotation=np.array([0,0,0]),
+    scale=np.array([1.0, 1.0, 1.0])
+)
+
+cube3 = Mesh(
+    vertices=vertices.copy(),
+    edges=edges,
+    faces=copy.deepcopy(faces),
+    vertex_normals=compute_vertex_normals(vertices, faces),
+    position=np.array([-3,0,3]),
+    rotation=np.array([0,0,0]),
+    scale=np.array([1.0, 1.0, 1.0])
+)
+
+cube4 = Mesh(
+    vertices=vertices.copy(),
+    edges=edges,
+    faces=copy.deepcopy(faces),
+    vertex_normals=compute_vertex_normals(vertices, faces),
+    position=np.array([3,0,3]),
+    rotation=np.array([0,0,0]),
+    scale=np.array([1.0, 1.0, 1.0])
+)
+
+
+
+vertice_dama, face_dama= load_mesh("models/dama.csv") # importanto figura
 dama = Mesh(
     vertices= vertice_dama,
     edges= build_edges(face_dama),
     faces= face_dama,
     vertex_normals= compute_vertex_normals(vertice_dama, face_dama),
     position=np.array([10,0,0]),
-    rotation=np.array([0,0,0])
+    rotation=np.array([0,0,0]), 
+    scale=np.array([1.0, 1.0, 1.0])
 )
 
-vertice_tower, face_tower = load_mesh("tower.csv")
+vertice_tower, face_tower = load_mesh("models/tower.csv")
 tower = Mesh(
     vertices= vertice_tower,
     edges= build_edges(face_tower),
     faces= face_tower,
     vertex_normals= compute_vertex_normals(vertice_tower, face_tower),
     position=np.array([0,0,0]),
-    rotation=np.array([-20,0,0])
+    rotation=np.array([-20,0,0]), 
+    scale=np.array([1.0, 1.0, 1.0])
 )
 
-vertice_queen, face_queen = load_mesh("queen.csv")
+vertice_queen, face_queen = load_mesh("models/queen.csv")
 queen = Mesh(
     vertices= vertice_queen,
     edges= build_edges(face_queen),
     faces= face_queen,
     vertex_normals= compute_vertex_normals(vertice_queen, face_queen),
     position=np.array([0,0,0]),
-    rotation=np.array([-10,0,0])
+    rotation=np.array([-10,0,0]),
+    scale=np.array([1.0, 1.0, 1.0])
 )
 
-light_position_world = np.array([5, 2, -2], dtype=float)
+vertice_pino, face_pino = load_obj("models/pinoS.obj")
 
+pino= Mesh(
+    vertices= vertice_pino,
+    edges= build_edges(face_pino),
+    faces= face_pino,
+    vertex_normals= compute_vertex_normals(vertice_pino, face_pino),
+    position=np.array([0,0,0]),
+    rotation=np.array([-10,0,0]),
+    scale=np.array([4.0, 4.0, 4.0])
+)
+
+'''scene.add_mesh(cube1)
+scene.add_mesh(cube2)
+scene.add_mesh(cube3)
+scene.add_mesh(cube4)
+scene.add_mesh(ground)
+'''
+scene.add_mesh(pino)
+
+
+scene.camera = camera
+
+# ajustar cores dos solidos
+
+for face in cube1.faces:
+    face.color = (255,0,0)
+
+for face in cube2.faces:
+    face.color = (0,255,0)
+
+for face in cube3.faces:
+    face.color = (0,0,255)
+
+for face in cube4.faces:
+    face.color = (255,255,0)
+for face in ground.faces:
+    face.color = (80, 120, 80)
+
+light = Light(
+    position=np.array([5, 2, -2], dtype=float)
+)
+
+scene.add_light(light)
 
 pygame.init()
 WIDTH = 800 # largaura de telaa
@@ -82,13 +190,21 @@ clock = pygame.time.Clock() # atualização da tela
 renderer = Renderer (screen) # apontado para a tela para desenhar o objeto
 rasterizer = Rasterizer(screen)
 
+render_system = RenderSystem(
+    rasterizer,
+    WIDTH,
+    HEIGHT
+)
+
 running = True
 while running:
     dt= clock.tick(60) # atualizar acada 60s
+
     fps = clock.get_fps()
     pygame.display.set_caption(
         f"FPS: {fps:.1f}"
     )
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # aperta o icone de feichar
             running=False
@@ -96,89 +212,48 @@ while running:
     # rotação horizaontal -> yaw rotaciona entorno do eixo Y 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        camera.yaw -=0.02
-    if keys[pygame.K_RIGHT]:
-        camera.yaw += 0.02
+        scene.camera.yaw -= 0.02
 
-    #rotação vertical
+    if keys[pygame.K_RIGHT]:
+        scene.camera.yaw += 0.02
+
     if keys[pygame.K_UP]:
-        camera.pitch += 0.02
+        scene.camera.pitch += 0.02
 
     if keys[pygame.K_DOWN]:
-        camera.pitch -= 0.02
+        scene.camera.pitch -= 0.02
 
-    #zoom
     if keys[pygame.K_q]:
-        camera.radius += 0.2
+        scene.camera.radius += 0.2
 
     if keys[pygame.K_e]:
-        camera.radius -= 0.2
+        scene.camera.radius -= 0.2
 
-    camera.pitch = max( -math.pi/2 + 0.1, min(math.pi/2 - 0.1, camera.pitch))
+    scene.camera.pitch = max( -math.pi/2 + 0.1, min(math.pi/2 - 0.1, camera.pitch))
 
-    # coordenadas do mundo
-    transformed = rotation(tower.vertices, tower.rotation) # retorna os vetores dos vertices convertidos
-    transformed = translate(transformed, tower.position) # translação
-    
-    update_camera(camera) # atualizar as coordenas da camera
+    update_camera(scene.camera) # atualizar as coordenas da camera
 
-    light_camera, _ = World_to_camera( np.array([light_position_world]), camera)
 
+    light = scene.lights[0]
+
+    light_camera, _ = World_to_camera(
+        np.array([light.position]),
+        scene.camera
+    )
     light_camera = light_camera[0]
 
-    # coordenadas da camera
-    transformed, camera_rotation = World_to_camera( transformed, camera ) # retorna os vetores em coordenadas da câmera
-
-    vertex_normals_camera = ( tower.vertex_normals @ camera_rotation.T)
-
-    #remocendo os vertices que não são visiveis
-    visible_faces = back_face(tower.faces, transformed)
-
-
-    for face in visible_faces:
-
-        i0, i1, i2 = face.vertices
-
-        c0 = vertex_phong(
-            transformed[i0],
-            vertex_normals_camera[i0],
-            light_camera,
-            face.color
-        )
-
-        c1 = vertex_phong(
-            transformed[i1],
-            vertex_normals_camera[i1],
-            light_camera,
-            face.color
-        )
-
-        c2 = vertex_phong(
-            transformed[i2],
-            vertex_normals_camera[i2],
-            light_camera,
-            face.color
-        )
-        face.vertex_colors = [
-            c0,
-            c1,
-            c2
-        ]
-
-    #projeção em perspectva
-    project = perspective(transformed, WIDTH, HEIGHT)
-
     screen.fill((20,20,20)) # cor de fundo da tela
+
     rasterizer.clear_zbuffer()
-    rasterizer.draw_faces(project, visible_faces)
+    render_system.render(scene)
 
     # eixo auxiliar
 
-    axes_world = renderer.world_axes(20.0)
+    axes_world = renderer.world_axes(5.0)
 
     axes_camera, _ = World_to_camera(
         axes_world,
-        camera
+        scene.camera
     )
 
     axes_projected = perspective(
