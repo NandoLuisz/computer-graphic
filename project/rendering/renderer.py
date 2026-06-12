@@ -10,40 +10,58 @@ class Renderer:
 
 
     def draw_wireframe(self, projected_vertices, edges):
-        if projected_vertices:
-            for start, end in edges:
 
-                pygame.draw.line(
-                    self.screen,
-                    (255,255,255),
-                    projected_vertices[start],
-                    projected_vertices[end],
-                    2
-                )
+        for start, end in edges:
 
-    def draw_point( self, point ):
+            p1 = projected_vertices[start]
+            p2 = projected_vertices[end]
 
-        if point is not None:
+            if p1 is None or p2 is None:
+                continue
 
-            x = point[0][0]
-            y = point[0][1]
-
-            pygame.draw.circle(
+            pygame.draw.line(
                 self.screen,
-                (255, 0, 0),
-                (x, y),
-                5
+                (255,255,255),
+                (p1[0], p1[1]),
+                (p2[0], p2[1]),
+                1
             )
+    
+
+    def draw_point( self, points, radius, color = (255, 0, 0) ):
+
+        for point in points:
+
+            if point is not None:
+
+                x = int(point[0])
+                y = int(point[1])
+
+                pygame.draw.circle(
+                    self.screen,
+                    color,
+                    (x, y),
+                    radius
+                )
 
 
     def draw_faces(self, projected_vertices, faces):
+
         for face in faces:
+
             points = []
+
             for i in face.vertices:
 
-                if projected_vertices[i] is None:
+                p = projected_vertices[i]
+
+                if p is None:
                     break
-                points.append(projected_vertices[i])
+
+                x, y, _ = p
+
+                points.append((x, y))
+
             if len(points) != 3:
                 continue
 
@@ -70,9 +88,9 @@ class Renderer:
         )
 
         colors = [
-            (59, 8, 8),  # X
-            (14, 48, 23),  # Y
-            (5, 5, 43)   # Z
+            (179, 30, 30),  # X
+            (28, 110, 8),  # Y
+            (5, 19, 150)   # Z
         ]
 
         for i in range(1,4):
@@ -131,3 +149,31 @@ class Renderer:
             ])
 
         return lines
+    
+    def draw_triangle_edges(self, projected_vertices, faces):
+
+        for face in faces:
+
+            points = []
+
+            for i in face.vertices:
+
+                if projected_vertices[i] is None:
+                    break
+
+                points.append(
+                    (
+                        projected_vertices[i][0],
+                        projected_vertices[i][1]
+                    )
+                )
+
+            if len(points) != 3:
+                continue
+
+            pygame.draw.polygon(
+                self.screen,
+                (255,255,255),
+                points,
+                1
+            )

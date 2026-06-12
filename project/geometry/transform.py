@@ -3,9 +3,6 @@ import numpy as np
 
 # realiza as operações de transformações que vimos em aula, o programa realiza operações matriciais 
 
-def translate(vertices, position):
-    return vertices + position
-
 def rotate_x(vetices, angle):
     angle = math.radians(angle)
     rotation_matrix=np.array([
@@ -40,6 +37,8 @@ def rotation(vertices, rotation):
 
     return vertices
 
+def translate(vertices, position):
+    return vertices + position
 
 def scale(vertices, factor):
     scale_matrix= np.array([

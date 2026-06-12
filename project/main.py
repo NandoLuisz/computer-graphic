@@ -6,7 +6,9 @@ import math
 from Io.loader import build_edges, load_mesh
 from Io.loader_obj import load_obj
 
+
 from geometry.vertex_normals import compute_vertex_normals
+from geometry.vertex_normals_surface import compute_vertex_normals as compute_vertex_normals_surface
 
 from rendering.projection import perspective
 from rendering.rasterizer import Rasterizer
@@ -36,8 +38,8 @@ camera = Camera(
     target= np.array([0, 0, 0]),
 
     yaw=math.radians(45),
-    pitch= math.radians(25),
-    radius=20 
+    pitch= math.radians(45),
+    radius=20
 )
 
 scene.set_camera(camera)
@@ -55,132 +57,124 @@ ground = Mesh(
     edges=plane_edges,
     faces=copy.deepcopy(plane_faces),
     vertex_normals=plane_normals,
-    position=np.array([0,-2,0]),
+    position=np.array([0,0,0]),
     rotation=np.array([0,0,0]),
     scale=np.array([1.0,1.0,1.0])
 )
 
 # criando objetos
 
-cube1 = Mesh(
-    vertices=vertices.copy(),
-    edges=edges,
-    faces=copy.deepcopy(faces),
-    vertex_normals=compute_vertex_normals(vertices, faces),
-    position=np.array([-3,0,-3]),
+
+vertice_pawn, face_pawn = load_obj("models/pinoS.obj")
+
+pawn= Mesh(
+    vertices= vertice_pawn,
+    edges= build_edges(face_pawn),
+    faces= face_pawn,
+    vertex_normals= compute_vertex_normals(vertice_pawn, face_pawn),
+    position=np.array([4,0,4]),
     rotation=np.array([0,0,0]),
-    scale=np.array([1.0, 1.0, 1.0])
+    scale=np.array([2.0, 2.0, 2.0])
 )
 
-cube2 = Mesh(
-    vertices=vertices.copy(),
-    edges=edges,
-    faces=copy.deepcopy(faces),
-    vertex_normals=compute_vertex_normals(vertices, faces),
-    position=np.array([3,0,-3]),
+vertice_queen, face_queen = load_obj("models/rainhaS.obj")
+
+queen= Mesh(
+    vertices= vertice_queen,
+    edges= build_edges(face_queen),
+    faces= face_queen,
+    vertex_normals= compute_vertex_normals(vertice_queen, face_queen),
+    position=np.array([-4,0,4]),
     rotation=np.array([0,0,0]),
-    scale=np.array([1.0, 1.0, 1.0])
+    scale=np.array([2.0, 2.0, 2.0])
 )
 
-cube3 = Mesh(
-    vertices=vertices.copy(),
-    edges=edges,
-    faces=copy.deepcopy(faces),
-    vertex_normals=compute_vertex_normals(vertices, faces),
-    position=np.array([-3,0,3]),
+vertice_king, face_king = load_obj("models/reiS.obj")
+
+king= Mesh(
+    vertices= vertice_king,
+    edges= build_edges(face_king),
+    faces= face_king,
+    vertex_normals= compute_vertex_normals(vertice_king, face_king),
+    position=np.array([4,0,-4]),
     rotation=np.array([0,0,0]),
-    scale=np.array([1.0, 1.0, 1.0])
+    scale=np.array([2.0, 2.0, 2.0])
 )
 
-cube4 = Mesh(
-    vertices=vertices.copy(),
-    edges=edges,
-    faces=copy.deepcopy(faces),
-    vertex_normals=compute_vertex_normals(vertices, faces),
-    position=np.array([3,0,3]),
-    rotation=np.array([0,0,0]),
-    scale=np.array([1.0, 1.0, 1.0])
-)
+vertice_tower, face_tower = load_obj("models/torre.obj")
 
-
-
-vertice_dama, face_dama= load_mesh("models/dama.csv") # importanto figura
-dama = Mesh(
-    vertices= vertice_dama,
-    edges= build_edges(face_dama),
-    faces= face_dama,
-    vertex_normals= compute_vertex_normals(vertice_dama, face_dama),
-    position=np.array([10,0,0]),
-    rotation=np.array([0,0,0]), 
-    scale=np.array([1.0, 1.0, 1.0])
-)
-
-vertice_tower, face_tower = load_mesh("models/tower.csv")
 tower = Mesh(
     vertices= vertice_tower,
     edges= build_edges(face_tower),
     faces= face_tower,
     vertex_normals= compute_vertex_normals(vertice_tower, face_tower),
-    position=np.array([0,0,0]),
-    rotation=np.array([-20,0,0]), 
-    scale=np.array([1.0, 1.0, 1.0])
+    position=np.array([-4,0,-4]),
+    rotation=np.array([0,0,0]),
+    scale=np.array([2.0, 2.0, 2.0])
 )
 
-vertice_queen, face_queen = load_mesh("models/queen.csv")
-queen = Mesh(
-    vertices= vertice_queen,
-    edges= build_edges(face_queen),
-    faces= face_queen,
-    vertex_normals= compute_vertex_normals(vertice_queen, face_queen),
+vertice_lady, face_lady = load_obj("models/damaS.obj")
+
+lady = Mesh(
+    vertices= vertice_lady,
+    edges= build_edges(face_lady),
+    faces= face_lady,
+    vertex_normals= compute_vertex_normals(vertice_lady, face_lady),
     position=np.array([0,0,0]),
-    rotation=np.array([-10,0,0]),
-    scale=np.array([1.0, 1.0, 1.0])
+    rotation=np.array([0,0,0]),
+    scale=np.array([2.0, 2.0, 2.0])
 )
 
-vertice_pino, face_pino = load_obj("models/pinoS.obj")
+vertice_surface, face_surface = load_obj("models/tabuleiroBenzier.obj")
 
-pino= Mesh(
-    vertices= vertice_pino,
-    edges= build_edges(face_pino),
-    faces= face_pino,
-    vertex_normals= compute_vertex_normals(vertice_pino, face_pino),
-    position=np.array([0,0,0]),
-    rotation=np.array([-10,0,0]),
-    scale=np.array([4.0, 4.0, 4.0])
+surface = Mesh(
+    vertices= vertice_surface,
+    edges= build_edges(face_surface),
+    faces= face_surface,
+    vertex_normals= compute_vertex_normals_surface(vertice_surface, face_surface),
+    position=np.array([0,-4,0]),
+    rotation=np.array([0,0,0]),
+    scale=np.array([2.0, 2.0, 2.0])
 )
 
-'''scene.add_mesh(cube1)
-scene.add_mesh(cube2)
-scene.add_mesh(cube3)
-scene.add_mesh(cube4)
+
+
+scene.add_mesh(pawn)
+scene.add_mesh(queen)
+scene.add_mesh(king)
+scene.add_mesh(tower)
 scene.add_mesh(ground)
+scene.add_mesh(lady)
+
+'''scene.add_mesh(surface)'''
+
 '''
-scene.add_mesh(pino)
+scene.add_mesh(queen)'''
 
 
 scene.camera = camera
 
 # ajustar cores dos solidos
 
-for face in cube1.faces:
-    face.color = (255,0,0)
-
-for face in cube2.faces:
-    face.color = (0,255,0)
-
-for face in cube3.faces:
+for face in queen.faces:
+    face.color = (255, 255, 0)
+    
+for face in pawn.faces:
     face.color = (0,0,255)
-
-for face in cube4.faces:
-    face.color = (255,255,0)
-for face in ground.faces:
-    face.color = (80, 120, 80)
+for face in king.faces:
+    face.color = (0, 255, 149)
+for face in tower.faces:
+    face.color = (255, 98, 0)
+for face in lady.faces:
+    face.color = (162, 0, 255)
 
 light = Light(
-    position=np.array([5, 2, -2], dtype=float)
+    position=np.array([0, 8, 0], dtype=float)
 )
 
 scene.add_light(light)
+USE_LIGHTING = True
+RENDER_MODE = "SOLID" # SOLID, POINT, POLYGON, AUTO
 
 pygame.init()
 WIDTH = 800 # largaura de telaa
@@ -192,6 +186,7 @@ rasterizer = Rasterizer(screen)
 
 render_system = RenderSystem(
     rasterizer,
+    renderer,
     WIDTH,
     HEIGHT
 )
@@ -202,7 +197,7 @@ while running:
 
     fps = clock.get_fps()
     pygame.display.set_caption(
-        f"FPS: {fps:.1f}"
+        f"FPS: {fps:.1f} | Lighting: {USE_LIGHTING} | render_mode: {RENDER_MODE}"
     )
 
     for event in pygame.event.get():
@@ -228,6 +223,24 @@ while running:
 
     if keys[pygame.K_e]:
         scene.camera.radius -= 0.2
+    if keys[pygame.K_h]:
+        RENDER_MODE = 'SOLID'
+
+    if keys[pygame.K_j]:
+        RENDER_MODE = 'POLYGON'
+    
+    if keys[pygame.K_k]:
+        RENDER_MODE = 'POINT'
+    
+    if keys[pygame.K_l]:
+        RENDER_MODE = 'AUTO'
+
+    if keys[pygame.K_n]:
+        RENDER_MODE = 'N'
+
+    if keys[pygame.K_TAB]:
+        USE_LIGHTING = not USE_LIGHTING
+    
 
     scene.camera.pitch = max( -math.pi/2 + 0.1, min(math.pi/2 - 0.1, camera.pitch))
 
@@ -245,11 +258,11 @@ while running:
     screen.fill((20,20,20)) # cor de fundo da tela
 
     rasterizer.clear_zbuffer()
-    render_system.render(scene)
+    render_system.render(scene, USE_LIGHTING, RENDER_MODE)
 
     # eixo auxiliar
 
-    axes_world = renderer.world_axes(5.0)
+    axes_world = renderer.world_axes(4.0)
 
     axes_camera, _ = World_to_camera(
         axes_world,
@@ -261,11 +274,18 @@ while running:
         WIDTH,
         HEIGHT
     )
+    light_projected = perspective(
+        np.array([light_camera]),
+        WIDTH,
+        HEIGHT
+    )
     renderer.draw_axes(axes_projected)
-
+    if USE_LIGHTING:
+        renderer.draw_point(light_projected, 8, (224, 190, 94))
     pygame.display.flip() #redesenha
+    '''print(camera.position)'''
 
 pygame.quit()
 
-    
+   
 

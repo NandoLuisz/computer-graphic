@@ -67,7 +67,7 @@ def load_obj(filename):
                     faces.append(
                         Face(
                             (indices[0], indices[2], indices[3]),
-                            (200,200,200)
+                            (157, 158, 157)
                         )
                     )
 

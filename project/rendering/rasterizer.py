@@ -161,24 +161,11 @@ class Rasterizer:
             if y1 == y2:
                 continue
 
-            if (
-                min(y1,y2)
-                <= y
-                <
-                max(y1,y2)
-            ):
+            if ( min(y1,y2) <= y < max(y1,y2) ):
 
-                t = (
-                    (y - y1)
-                    /
-                    (y2 - y1)
-                )
+                t = ( (y - y1) / (y2 - y1) )
 
-                x = (
-                    P1[0]
-                    +
-                    t*(P2[0]-P1[0])
-                )
+                x = ( P1[0] + t*(P2[0]-P1[0]) )
 
                 intersections.append(x)
 
@@ -207,3 +194,7 @@ class Rasterizer:
         )
 
         return alpha,beta,gamma
+    
+    def screen_at(self):
+
+        return self.screen

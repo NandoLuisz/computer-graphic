@@ -9,7 +9,7 @@ import numpy as np
 
 
 
-def perspective(vertices, width, height, focal_length = 100):
+def perspective(vertices, width, height, focal_length = 200):
 
     projected = []
 

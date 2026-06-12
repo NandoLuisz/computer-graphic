@@ -2,10 +2,10 @@ import numpy as np
 from geometry.face import Face
 
 vertices = np.array([
-    [-5, 0, -5],  # 0
-    [ 5, 0, -5],  # 1
-    [ 5, 0,  5],  # 2
-    [-5, 0,  5]   # 3
+    [-6, 0, -6],  # 0
+    [ 6, 0, -6],  # 1
+    [ 6, 0,  6],  # 2
+    [-6, 0,  6]   # 3
 ], dtype=float)
 
 edges = [
